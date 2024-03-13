@@ -95,7 +95,8 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.add, // Example icon
+                                  Icons
+                                      .accessibility_new_rounded, // Example icon
                                   color: Colors.white,
                                   size: 55,
                                 ),

@@ -65,16 +65,16 @@ class _NewCardState extends State<NewCard> {
                   padding: const EdgeInsets.all(16.0),
                   child: AppinioSwiper(
                     loop: true,
-                    backgroundCardsCount: 2,
-                    swipeOptions: const AppinioSwipeOptions.all(),
-                    unlimitedUnswipe: true,
+                    backgroundCardCount: 2,
+                    swipeOptions: const SwipeOptions.all(),
+                    allowUnlimitedUnSwipe: true,
                     controller: controller,
-                    unswipe: _unswipe,
-                    onSwipe: _swipe,
+                    // onUnSwipe: _unswipe,
+                    // onSwipeBegin: _swipe,
                     onEnd: _onEnd,
-                    cardsCount: widget.flashCards.length,
-                    cardsBuilder: (BuildContext context, int index) {
-                      var card = widget.flashCards[index];
+                    cardCount: widget.flashCards.length,
+                    cardBuilder: (BuildContext context, int index) {
+                      var card = widget.flashCards[0];
                       return FlipCardsWidget(
                         bgColor: cardColor,
                         cardsLenght: widget.flashCards.length,
@@ -150,10 +150,10 @@ class _NewCardState extends State<NewCard> {
     );
   }
 
-  void _swipe(int index, AppinioSwiperDirection direction) {
-    print("the card was swiped to the: ${direction.name}");
-    print(index);
-  }
+  // void _swipe(int index, AppinioSwiperDirection direction) {
+  //   print("the card was swiped to the: ${direction.name}");
+  //   print(index);
+  // }
 
   void _unswipe(bool unswiped) {
     if (unswiped) {
