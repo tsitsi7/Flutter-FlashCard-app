@@ -168,6 +168,16 @@ class _HomePageState extends State<HomePage> {
   Future<void> saveFlashCardLocally(FlashCard card) async {
     final prefs = await SharedPreferences.getInstance();
     final flashCardsJson = prefs.getStringList('flashCards') ?? [];
+    // Convert options list to JSON array
+    List<String> optionsJson =
+        card.options.map((option) => jsonEncode(option)).toList();
+    // Create a map for the flashcard data
+    Map<String, dynamic> cardData = {
+      'topic': card.topic,
+      'question': card.question,
+      'answer': card.answer,
+      'options': optionsJson,
+    };
     flashCardsJson.add(jsonEncode(card.toJson()));
     await prefs.setStringList('flashCards', flashCardsJson);
   }
@@ -186,6 +196,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showAddCardDialog(BuildContext context) {
+    String topicValue = '';
+    String questionValue = '';
+    String answerValue = ''; // Declare the answer variable here
+    List<String> optionsValue = [];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -202,6 +216,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (value) {
                     // Update topic value
+                    topicValue = value;
                   },
                 ),
                 const SizedBox(height: 10),
@@ -211,6 +226,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (value) {
                     // Update question value
+                    setState(() {
+                      questionValue = value;
+                    });
                   },
                 ),
                 const SizedBox(height: 10),
@@ -220,6 +238,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (value) {
                     // Update answer value
+                    setState(() {
+                      answerValue = value;
+                    });
                   },
                 ),
                 const SizedBox(height: 10),
@@ -229,6 +250,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (value) {
                     // Update options value
+                    setState(() {
+                      optionsValue =
+                          value.split(',').map((e) => e.trim()).toList();
+                    });
                   },
                 ),
               ],
@@ -245,10 +270,10 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 // Save the card information
                 final newCard = FlashCard(
-                  topic: "New Topic",
-                  question: "New Question",
-                  answer: "New Answer",
-                  options: ["Option 1", "Option 2"],
+                  topic: topicValue,
+                  question: questionValue,
+                  answer: answerValue,
+                  options: optionsValue,
                 );
                 saveFlashCardLocally(newCard);
                 Navigator.of(context).pop();
