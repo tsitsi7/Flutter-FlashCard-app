@@ -1,4 +1,5 @@
 import 'package:flashcards_quiz/views/home_screen.dart';
+import 'package:flashcards_quiz/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: LoginPage(),
     );
   }
 }
