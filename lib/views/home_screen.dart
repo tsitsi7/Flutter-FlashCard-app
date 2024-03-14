@@ -94,12 +94,12 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons
-                                      .accessibility_new_rounded, // Example icon
-                                  color: Colors.white,
-                                  size: 55,
-                                ),
+                                // Icon(
+                                //   Icons
+                                //       .accessibility_new_rounded, // Example icon
+                                //   color: Colors.white,
+                                //   size: 55,
+                                // ),
                                 const SizedBox(
                                   height: 15,
                                 ),
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
   // Method to save flashcards locally
   Future<void> saveFlashCardLocally(FlashCard card) async {
     final prefs = await SharedPreferences.getInstance();
-    final flashCardsJson = prefs.getStringList('flashCards') ?? [];
+    List<String> flashCardsJson = prefs.getStringList('flashCards') ?? [];
     // Convert options list to JSON array
     List<String> optionsJson =
         card.options.map((option) => jsonEncode(option)).toList();
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("Cancel"),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 // Save the card information
                 final newCard = FlashCard(
                   topic: topicValue,
@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                   answer: answerValue,
                   options: optionsValue,
                 );
-                saveFlashCardLocally(newCard);
+                await saveFlashCardLocally(newCard);
                 Navigator.of(context).pop();
               },
               child: Text("Add"),
