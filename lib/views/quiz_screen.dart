@@ -36,7 +36,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int _questionNumber = 1;
   PageController _controller = PageController();
   int score = 0;
-  bool isLocked = false;
+  bool isLocked = true;
   List optionsLetters = ["A.", "B.", "C.", "D."];
 
   void startTimerOnQuestions() {
@@ -59,7 +59,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void navigateToNewScreen() {
-    if (_questionNumber < widget.questionlenght.length) {
+    if (_questionNumber < widget.optionsList.length) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOut,
@@ -77,7 +77,7 @@ class _QuizScreenState extends State<QuizScreen> {
         MaterialPageRoute(
           builder: (context) => ResultsScreen(
             score: score,
-            totalQuestions: widget.questionlenght.length,
+            totalQuestions: widget.optionsList.length,
             whichTopic: widget.topicType,
           ),
         ),
@@ -105,7 +105,7 @@ class _QuizScreenState extends State<QuizScreen> {
     print(widget.questions[0]);
     print(widget.topicType);
     print(widget.questionlenght);
-    print(widget.optionsList);
+    print(widget.optionsList[0]);
     const Color bgColor3 = Color(0xFF5170FD);
     const Color bgColor = Color(0xFF4993FA);
 
@@ -190,7 +190,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Question $_questionNumber/${widget.questionlenght.length}",
+                            "Question $_questionNumber/${widget.optionsList.length}",
                             style: TextStyle(
                                 fontSize: 16, color: Colors.grey.shade500),
                           ),
@@ -198,7 +198,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             child: PageView.builder(
                               controller: _controller,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: widget.questionlenght.length,
+                              itemCount: widget.optionsList.length,
                               onPageChanged: (value) {
                                 setState(() {
                                   _questionNumber = value + 1;
@@ -208,14 +208,14 @@ class _QuizScreenState extends State<QuizScreen> {
                               },
                               itemBuilder: (context, index) {
                                 final myquestions =
-                                    widget.questionlenght[index];
+                                    widget.optionsList[index]['question'];
                                 print('this is my question $myquestions');
                                 var optionsIndex = widget.optionsList[index];
 
                                 return Column(
                                   children: [
                                     Text(
-                                      myquestions.toString(),
+                                      myquestions,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
@@ -228,43 +228,56 @@ class _QuizScreenState extends State<QuizScreen> {
                                     ),
                                     Expanded(
                                       child: ListView.builder(
-                                        itemCount: 5,
-                                        // itemCount: myquestions.options.length,
+                                        itemCount: widget
+                                            .optionsList[_questionNumber - 1]
+                                                ['optionsList']
+                                            .length,
                                         itemBuilder: (context, index) {
                                           var color = Colors.grey.shade200;
 
                                           var questionOption =
-                                              myquestions.optionsList[index];
-                                          final letters = optionsLetters[index];
+                                              widget.optionsList[
+                                                      _questionNumber - 1]
+                                                  ['optionsList'][index];
+                                          // final letters = optionsLetters[index];
+                                          final letters = String.fromCharCode(
+                                              'A'.codeUnitAt(0) + index);
 
-                                          if (myquestions.isLocked) {
+                                          if (isLocked) {
                                             if (questionOption ==
-                                                myquestions
-                                                    .selectedWiidgetOption) {
-                                              color = questionOption.isCorrect
+                                                widget.optionsList[
+                                                        _questionNumber - 1]
+                                                    ['correctAnswer']) {
+                                              color = isLocked
                                                   ? Colors.green
                                                   : Colors.red;
-                                            } else if (questionOption
-                                                .isCorrect) {
+                                            } else if (isLocked) {
                                               color = Colors.green;
                                             }
                                           }
                                           return InkWell(
                                             onTap: () {
-                                              print(optionsIndex);
                                               stopTime();
-                                              if (!myquestions.isLocked) {
+                                              if (isLocked) {
                                                 setState(() {
-                                                  myquestions.isLocked = true;
+                                                  isLocked = true;
                                                   myquestions
                                                           .selectedWiidgetOption =
                                                       questionOption;
                                                 });
+                                                // Handle option selection
+                                                var selectedOption =
+                                                    widget.optionsList[
+                                                            _questionNumber - 1]
+                                                        ['optionsList'][index];
+                                                var correctAnswer =
+                                                    widget.optionsList[
+                                                            _questionNumber - 1]
+                                                        ['correctAnswer'];
 
-                                                isLocked = myquestions.isLocked;
-                                                if (myquestions
-                                                    .selectedWiidgetOption
-                                                    .isCorrect) {
+                                                // isLocked = myquestions.isLocked;
+                                                if (selectedOption ==
+                                                    correctAnswer) {
                                                   score++;
                                                 }
                                               }
@@ -289,12 +302,16 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    "$letters ${questionOption.text}",
+                                                    "$letters ${questionOption}",
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   ),
-                                                  isLocked == true
-                                                      ? questionOption.isCorrect
+                                                  isLocked
+                                                      ? questionOption ==
+                                                              widget.optionsList[
+                                                                      _questionNumber -
+                                                                          1][
+                                                                  'correctAnswer']
                                                           ? const Icon(
                                                               Icons
                                                                   .check_circle,
@@ -318,9 +335,9 @@ class _QuizScreenState extends State<QuizScreen> {
                               },
                             ),
                           ),
-                          isLocked
-                              ? buildElevatedButton()
-                              : const SizedBox.shrink(),
+                          // isLocked
+                          //     ? buildElevatedButton()
+                          //     : const SizedBox.shrink(),
                         ],
                       ),
                     ),
@@ -336,7 +353,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _resetQuestionLocks() {
     for (var question in widget.questionlenght) {
-      question.isLocked = false;
+      isLocked = false;
     }
     questionTimerSeconds = 20;
   }
@@ -354,7 +371,7 @@ class _QuizScreenState extends State<QuizScreen> {
         elevation: MaterialStateProperty.all(4),
       ),
       onPressed: () {
-        if (_questionNumber < widget.questionlenght.length) {
+        if (_questionNumber < widget.optionsList.length) {
           _controller.nextPage(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeInOut,
@@ -372,7 +389,7 @@ class _QuizScreenState extends State<QuizScreen> {
             MaterialPageRoute(
               builder: (context) => ResultsScreen(
                 score: score,
-                totalQuestions: widget.questionlenght.length,
+                totalQuestions: widget.optionsList.length,
                 whichTopic: widget.topicType,
               ),
             ),
@@ -380,7 +397,7 @@ class _QuizScreenState extends State<QuizScreen> {
         }
       },
       child: Text(
-        _questionNumber < widget.questionlenght.length
+        _questionNumber < widget.optionsList.length
             ? 'Next Question'
             : 'Result',
         style: Theme.of(context).textTheme.bodySmall!.copyWith(
