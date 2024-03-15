@@ -145,10 +145,11 @@ class _NewCardState extends State<NewCard> {
                               questions: questions,
                               questionlenght: [widget.flashCards.length],
                               optionsList: widget.flashCards
-                                  .map((card) => [
-                                        [card.question],
-                                        [card.options]
-                                      ])
+                                  .map((card) => {
+                                        'question': card.question,
+                                        'correctAnswer': card.answer,
+                                        'optionsList': card.options
+                                      })
                                   .toList(),
                               topicType: widget.topicName,
                             ),
