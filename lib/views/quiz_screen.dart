@@ -7,12 +7,13 @@ import 'package:flutter/material.dart';
 class QuizScreen extends StatefulWidget {
   final String topicType;
   final List<dynamic> questionlenght;
-  final dynamic optionsList;
+  final List<dynamic> optionsList;
   const QuizScreen(
-      {super.key,
+      {Key? key,
       required this.questionlenght,
       required this.optionsList,
-      required this.topicType});
+      required this.topicType})
+      : super(key: key);
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -77,7 +78,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void initState() {
     super.initState();
     _controller = PageController(initialPage: 0);
-    _resetQuestionLocks();
+    // _resetQuestionLocks();
     startTimerOnQuestions();
   }
 
@@ -196,9 +197,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
                                 return Column(
                                   children: [
-                                  
                                     Text(
-                                      myquestions.text,
+                                      myquestions.toString(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
@@ -211,7 +211,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                     ),
                                     Expanded(
                                       child: ListView.builder(
-                                        itemCount: myquestions.options.length,
+                                        itemCount: 5,
+                                        // itemCount: myquestions.options.length,
                                         itemBuilder: (context, index) {
                                           var color = Colors.grey.shade200;
 

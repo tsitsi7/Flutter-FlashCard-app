@@ -1,3 +1,4 @@
+import 'package:flashcards_quiz/models/flashcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flashcards_quiz/views/quiz_screen.dart';
@@ -9,19 +10,28 @@ import 'dart:math';
 class NewCard extends StatefulWidget {
   final String topicName;
   final String typeOfTopic;
-  final List<dynamic> flashCards;
+  final List<FlashCard> flashCards;
   const NewCard(
       {Key? key,
       required this.topicName,
       required this.flashCards,
-      required this.typeOfTopic});
+      required this.typeOfTopic})
+      : super(key: key);
 
   @override
-  State<NewCard> createState() => _NewCardState();
+  _NewCardState createState() => _NewCardState();
 }
 
 class _NewCardState extends State<NewCard> {
+  int _currentIndex = 0;
+  late AppinioSwiperController _controller;
   final AppinioSwiperController controller = AppinioSwiperController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AppinioSwiperController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,27 +74,31 @@ class _NewCardState extends State<NewCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AppinioSwiper(
-                    loop: true,
-                    backgroundCardCount: 2,
-                    swipeOptions: const SwipeOptions.all(),
-                    allowUnlimitedUnSwipe: true,
-                    controller: controller,
-                    // onUnSwipe: _unswipe,
-                    // onSwipeBegin: _swipe,
-                    onEnd: _onEnd,
-                    cardCount: widget.flashCards.length,
-                    cardBuilder: (BuildContext context, int index) {
-                      var card = widget.flashCards[0];
-                      return FlipCardsWidget(
-                        bgColor: cardColor,
-                        cardsLenght: widget.flashCards.length,
-                        currentIndex: index + 1,
-                        answer: card.answer,
-                        question: card.question,
-                        currentTopic: widget.topicName,
-                      );
-                    },
-                  ),
+                      loop: true,
+                      backgroundCardCount: 2,
+                      swipeOptions: const SwipeOptions.all(),
+                      allowUnlimitedUnSwipe: true,
+                      controller: _controller,
+                      // onUnSwipe: _unswipe,
+                      // onSwipeBegin: _swipe,
+                      // onEnd: _onEnd,
+                      cardCount: widget.flashCards.length,
+                      cardBuilder: (BuildContext context, int index) {
+                        var card = widget.flashCards[index];
+                        return FlipCardsWidget(
+                          bgColor: cardColor,
+                          cardsLenght: widget.flashCards.length,
+                          currentIndex: index + 1,
+                          answer: card.answer,
+                          question: card.question,
+                          currentTopic: widget.topicName,
+                        );
+                      },
+                      onEnd: () {
+                        setState(() {
+                          _currentIndex = 0;
+                        });
+                      }),
                 ),
               ),
               SizedBox(
@@ -100,7 +114,7 @@ class _NewCardState extends State<NewCard> {
                         ),
                         elevation: MaterialStateProperty.all(4),
                       ),
-                      onPressed: () => controller.unswipe(),
+                      onPressed: () => _controller.unswipe(),
                       child: const Text(
                         "Reorder Cards",
                         style: TextStyle(
@@ -124,7 +138,7 @@ class _NewCardState extends State<NewCard> {
                             builder: (context) => QuizScreen(
                               questionlenght: [widget.flashCards.length],
                               optionsList: widget.flashCards
-                                  .map((card) => card.answer)
+                                  .map((card) => card.options)
                                   .toList(),
                               topicType: widget.topicName,
                             ),
