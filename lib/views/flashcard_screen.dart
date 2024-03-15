@@ -26,7 +26,6 @@ class _NewCardState extends State<NewCard> {
   int _currentIndex = 0;
   late AppinioSwiperController _controller;
   final AppinioSwiperController controller = AppinioSwiperController();
-
   @override
   void initState() {
     super.initState();
@@ -37,6 +36,12 @@ class _NewCardState extends State<NewCard> {
   Widget build(BuildContext context) {
     const Color bgColor3 = Color(0xFF5170FD);
     const Color cardColor = Color(0xFF4993FA);
+    List<Question> questions = widget.flashCards
+        .map((card) => Question(
+              questionText: card.question,
+              correctAnswer: card.answer,
+            ))
+        .toList();
 
     return Scaffold(
       backgroundColor: bgColor3,
@@ -62,6 +67,7 @@ class _NewCardState extends State<NewCard> {
                       ),
                     ),
                     MyProgressIndicator(
+                      questions: questions,
                       questionlenght: [widget.flashCards.length],
                       optionsList:
                           widget.flashCards.map((card) => card.answer).toList(),
@@ -136,9 +142,13 @@ class _NewCardState extends State<NewCard> {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => QuizScreen(
+                              questions: questions,
                               questionlenght: [widget.flashCards.length],
                               optionsList: widget.flashCards
-                                  .map((card) => card.options)
+                                  .map((card) => [
+                                        [card.question],
+                                        [card.options]
+                                      ])
                                   .toList(),
                               topicType: widget.topicName,
                             ),

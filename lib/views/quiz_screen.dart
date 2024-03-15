@@ -1,19 +1,30 @@
 import 'dart:async';
-
 import 'package:flashcards_quiz/views/results_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+class Question {
+  final String questionText;
+  final String correctAnswer;
+
+  Question({
+    required this.questionText,
+    required this.correctAnswer,
+  });
+}
 
 class QuizScreen extends StatefulWidget {
   final String topicType;
   final List<dynamic> questionlenght;
   final List<dynamic> optionsList;
-  const QuizScreen(
-      {Key? key,
-      required this.questionlenght,
-      required this.optionsList,
-      required this.topicType})
-      : super(key: key);
+  final List<Question> questions;
+  const QuizScreen({
+    Key? key,
+    required this.questionlenght,
+    required this.optionsList,
+    required this.topicType,
+    required this.questions,
+  }) : super(key: key);
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -90,6 +101,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('this is the options');
+    print(widget.questions[0]);
+    print(widget.topicType);
+    print(widget.questionlenght);
+    print(widget.optionsList);
     const Color bgColor3 = Color(0xFF5170FD);
     const Color bgColor = Color(0xFF4993FA);
 
@@ -110,7 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 Row(
                   children: [
                     Text(
-                      "${widget.topicType} Riddles",
+                      "${widget.topicType} quiz",
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Colors.white,
                           fontSize: 20,
@@ -193,6 +209,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               itemBuilder: (context, index) {
                                 final myquestions =
                                     widget.questionlenght[index];
+                                print('this is my question $myquestions');
                                 var optionsIndex = widget.optionsList[index];
 
                                 return Column(
@@ -217,7 +234,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                           var color = Colors.grey.shade200;
 
                                           var questionOption =
-                                              myquestions.options[index];
+                                              myquestions.optionsList[index];
                                           final letters = optionsLetters[index];
 
                                           if (myquestions.isLocked) {
