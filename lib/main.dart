@@ -1,5 +1,9 @@
+import 'package:flashcards_quiz/views/flashcard_screen.dart';
 import 'package:flashcards_quiz/views/home_screen.dart';
 import 'package:flashcards_quiz/views/login_screen.dart';
+import 'package:flashcards_quiz/views/quiz_screen.dart';
+import 'package:flashcards_quiz/views/results_screen.dart';
+import 'package:flashcards_quiz/widgets/results_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +34,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: LoginPage(),
+      routes: {
+        '/home_screen': (context) => const HomePage(),
+      },
     );
   }
 }
