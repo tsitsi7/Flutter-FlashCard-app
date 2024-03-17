@@ -3,27 +3,13 @@ import 'package:flashcards_quiz/views/results_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Question {
-  final String questionText;
-  final String correctAnswer;
-
-  Question({
-    required this.questionText,
-    required this.correctAnswer,
-  });
-}
-
 class QuizScreen extends StatefulWidget {
   final String topicType;
-  final List<dynamic> questionlenght;
   final List<dynamic> optionsList;
-  final List<Question> questions;
   const QuizScreen({
     Key? key,
-    required this.questionlenght,
     required this.optionsList,
     required this.topicType,
-    required this.questions,
   }) : super(key: key);
 
   @override
@@ -36,8 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int _questionNumber = 1;
   PageController _controller = PageController();
   int score = 0;
-  bool isLocked = true;
-  List optionsLetters = ["A.", "B.", "C.", "D."];
+  bool isLocked = false;
 
   void startTimerOnQuestions() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -89,7 +74,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void initState() {
     super.initState();
     _controller = PageController(initialPage: 0);
-    // _resetQuestionLocks();
+    _resetQuestionLocks();
     startTimerOnQuestions();
   }
 
@@ -102,9 +87,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     print('this is the options');
-    print(widget.questions[0]);
     print(widget.topicType);
-    print(widget.questionlenght);
     print(widget.optionsList[0]);
     const Color bgColor3 = Color(0xFF5170FD);
     const Color bgColor = Color(0xFF4993FA);
@@ -203,15 +186,12 @@ class _QuizScreenState extends State<QuizScreen> {
                                 setState(() {
                                   _questionNumber = value + 1;
                                   isLocked = false;
-                                  _resetQuestionLocks();
+                                  // _resetQuestionLocks();
                                 });
                               },
                               itemBuilder: (context, index) {
                                 final myquestions =
                                     widget.optionsList[index]['question'];
-                                print('this is my question $myquestions');
-                                var optionsIndex = widget.optionsList[index];
-
                                 return Column(
                                   children: [
                                     Text(
@@ -234,51 +214,92 @@ class _QuizScreenState extends State<QuizScreen> {
                                             .length,
                                         itemBuilder: (context, index) {
                                           var color = Colors.grey.shade200;
-
+                                          var selectedOption;
                                           var questionOption =
                                               widget.optionsList[
                                                       _questionNumber - 1]
                                                   ['optionsList'][index];
-                                          // final letters = optionsLetters[index];
                                           final letters = String.fromCharCode(
                                               'A'.codeUnitAt(0) + index);
-
-                                          if (isLocked) {
-                                            if (questionOption ==
-                                                widget.optionsList[
-                                                        _questionNumber - 1]
-                                                    ['correctAnswer']) {
-                                              color = isLocked
-                                                  ? Colors.green
-                                                  : Colors.red;
-                                            } else if (isLocked) {
-                                              color = Colors.green;
-                                            }
-                                          }
                                           return InkWell(
                                             onTap: () {
-                                              stopTime();
-                                              if (isLocked) {
+                                              if (!isLocked) {
+                                                // stopTime();
                                                 setState(() {
                                                   isLocked = true;
-                                                  myquestions
-                                                          .selectedWiidgetOption =
+                                                  selectedOption =
                                                       questionOption;
                                                 });
                                                 // Handle option selection
-                                                var selectedOption =
-                                                    widget.optionsList[
-                                                            _questionNumber - 1]
-                                                        ['optionsList'][index];
                                                 var correctAnswer =
                                                     widget.optionsList[
                                                             _questionNumber - 1]
                                                         ['correctAnswer'];
-
-                                                // isLocked = myquestions.isLocked;
                                                 if (selectedOption ==
                                                     correctAnswer) {
+                                                  // isLocked = false;
                                                   score++;
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Color(0xFF4993FA),
+                                                        title: Text(
+                                                            'You got it right!'),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all(Color(
+                                                                          0xFF4993FA)),
+                                                            ),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              navigateToNewScreen();
+                                                            },
+                                                            child: Text('Next'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                } else {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        title: Text(
+                                                            'Wrong answer'),
+                                                        content: Text(
+                                                            'The correct answer for $myquestions: $correctAnswer'),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all(Color(
+                                                                          0xFFDE1F42)),
+                                                            ),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              navigateToNewScreen();
+                                                            },
+                                                            child: Text('Next'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 }
                                               }
                                             },
@@ -306,23 +327,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   ),
-                                                  isLocked
-                                                      ? questionOption ==
-                                                              widget.optionsList[
-                                                                      _questionNumber -
-                                                                          1][
-                                                                  'correctAnswer']
-                                                          ? const Icon(
-                                                              Icons
-                                                                  .check_circle,
-                                                              color:
-                                                                  Colors.green,
-                                                            )
-                                                          : const Icon(
-                                                              Icons.cancel,
-                                                              color: Colors.red,
-                                                            )
-                                                      : const SizedBox.shrink()
                                                 ],
                                               ),
                                             ),
@@ -352,7 +356,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _resetQuestionLocks() {
-    for (var question in widget.questionlenght) {
+    for (var question in widget.optionsList) {
       isLocked = false;
     }
     questionTimerSeconds = 20;

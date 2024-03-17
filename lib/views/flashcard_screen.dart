@@ -36,12 +36,12 @@ class _NewCardState extends State<NewCard> {
   Widget build(BuildContext context) {
     const Color bgColor3 = Color(0xFF5170FD);
     const Color cardColor = Color(0xFF4993FA);
-    List<Question> questions = widget.flashCards
-        .map((card) => Question(
-              questionText: card.question,
-              correctAnswer: card.answer,
-            ))
-        .toList();
+    // List<Question> questions = widget.flashCards
+    //     .map((card) => Question(
+    //           questionText: card.question,
+    //           correctAnswer: card.answer,
+    //         ))
+    //     .toList();
 
     return Scaffold(
       backgroundColor: bgColor3,
@@ -67,8 +67,8 @@ class _NewCardState extends State<NewCard> {
                       ),
                     ),
                     MyProgressIndicator(
-                      questions: questions,
-                      questionlenght: [widget.flashCards.length],
+                      // questions: questions,
+                      // questionlenght: [widget.flashCards.length],
                       optionsList:
                           widget.flashCards.map((card) => card.answer).toList(),
                       topicType: widget.topicName,
@@ -142,8 +142,6 @@ class _NewCardState extends State<NewCard> {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => QuizScreen(
-                              questions: questions,
-                              questionlenght: [widget.flashCards.length],
                               optionsList: widget.flashCards
                                   .map((card) => {
                                         'question': card.question,

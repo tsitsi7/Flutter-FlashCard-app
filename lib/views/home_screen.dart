@@ -195,6 +195,13 @@ class _HomePageState extends State<HomePage> {
     return groupedData;
   }
 
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text.substring(0, 1).toUpperCase() + text.substring(1);
+  }
+
   void _showAddCardDialog(BuildContext context) {
     String topicValue = '';
     String questionValue = '';
@@ -270,13 +277,20 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 // Save the card information
                 final newCard = FlashCard(
-                  topic: topicValue,
+                  topic: capitalizeFirstLetter(topicValue),
                   question: questionValue,
                   answer: answerValue,
                   options: optionsValue,
                 );
                 await saveFlashCardLocally(newCard);
-                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        HomePage(), // Navigate to the same page
+                  ),
+                );
+                // Navigator.of(context).pop();
               },
               child: Text("Add"),
             ),

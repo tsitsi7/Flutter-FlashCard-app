@@ -35,35 +35,47 @@ class ResultsCard extends StatelessWidget {
                     child: Center(
                       child: RichText(
                         textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            for (var ii = 0;
-                                ii < "Congratulations!,".length;
-                                ii++) ...[
-                              TextSpan(
-                                text: "Congratulations!,"[ii],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontSize: 12 + ii.toDouble()),
-                              ),
-                            ],
-                            //m'adamfo(Twi) - my friend
-                            TextSpan(
-                              text: "  m'adamfo\n You Scored  \n",
-                              style: Theme.of(context).textTheme.bodySmall,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: " You Scored  \n",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          TextSpan(
+                            text: "$roundedPercentageScore%",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontSize: 30,
+                                    ),
+                          ),
+                        ]
+
+                            // children: [
+                            //   for (var ii = 0;
+                            //       ii < "Congratulations!,".length;
+                            //       ii++) ...[
+                            //     TextSpan(
+                            //       text: "Congratulations!,"[ii],
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .bodyMedium!
+                            //           .copyWith(fontSize: 12 + ii.toDouble()),
+                            //     ),
+                            //   ],
+                            //   TextSpan(
+                            //     text: "  m'adamfo\n You Scored  \n",
+                            //     style: Theme.of(context).textTheme.bodySmall,
+                            //   ),
+                            //   TextSpan(
+                            //     text: "$roundedPercentageScore%",
+                            //     style: Theme.of(context)
+                            //         .textTheme
+                            //         .bodyLarge!
+                            //         .copyWith(
+                            //           fontSize: 30,
+                            //         ),
+                            //   ),
+                            // ],
                             ),
-                            TextSpan(
-                              text: "$roundedPercentageScore%",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                    fontSize: 30,
-                                  ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),
