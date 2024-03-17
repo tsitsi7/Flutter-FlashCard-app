@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<FlashCard> flashCards = [];
   void _navigateToEditScreen(FlashCard flashCard) {
     Navigator.push(
@@ -55,8 +56,65 @@ class _HomePageState extends State<HomePage> {
     final groupedData = groupFlashCardsByTopic(flashCards);
     const Color bgColor = Color(0xFF4993FA);
     const Color bgColor3 = Color(0xFF5170FD);
-    return Scaffold(
+    return MaterialApp(
+        home: Scaffold(
+      key: _scaffoldKey,
       backgroundColor: bgColor3,
+      appBar: AppBar(
+        title: Text('Flash Card Quiz'),
+        backgroundColor: bgColor3,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.menu), // Hamburger icon
+          onPressed: () {
+            showMenu(
+              context: context,
+              color: Colors.white,
+              position: RelativeRect.fromLTRB(0, kToolbarHeight, 0, 0),
+              items: [
+                PopupMenuItem(
+                  child: Text('Logout'),
+                  onTap: () {
+                    // Perform logout action here
+                    Navigator.pushReplacementNamed(context, '/login_screen');
+                  },
+                ),
+              ],
+            );
+            // _scaffoldKey.currentState?.openDrawer();
+            // Handle your drawer navigation or any other action
+          },
+        ),
+      ),
+      // drawer: Drawer(
+      //   child: Material(
+      //     elevation: 8.0,
+      //     child: ListView(
+      //       padding: EdgeInsets.zero,
+      //       children: <Widget>[
+      //         DrawerHeader(
+      //           decoration: BoxDecoration(
+      //             color: Colors.blue,
+      //           ),
+      //           child: Text(
+      //             'Menu',
+      //             style: TextStyle(
+      //               color: Colors.white,
+      //               fontSize: 24,
+      //             ),
+      //           ),
+      //         ),
+      //         ListTile(
+      //           title: Text('Logout'),
+      //           onTap: () {
+      //             Navigator.pushReplacementNamed(context, '/login');
+      //             // Perform logout action here
+      //           },
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       body: Stack(
         children: [
           SafeArea(
@@ -66,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                 physics: const BouncingScrollPhysics(),
                 children: [
                   Container(
+                    // add a logout button here that directs to the login page
                     decoration: BoxDecoration(
                       color: bgColor3,
                       boxShadow: [
@@ -207,7 +266,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   // Method to load flashcards from local storage
