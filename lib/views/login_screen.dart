@@ -1,115 +1,57 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class LoginPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    const appTitle = 'Login Page';
-    return MaterialApp(
-      title: appTitle,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MyLogin(),
-        '/home_screen': (context) => const CreateFlashcardPage(),
-      },
-    );
-  }
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class MyLogin extends StatefulWidget {
-  const MyLogin({Key? key}) : super(key: key);
-
-  @override
-  MyLoginState createState() {
-    return MyLoginState();
-  }
-}
-
-class MyLoginState extends State<MyLogin> {
-  final _formKey = GlobalKey<FormState>();
-  late String _username;
-  late String _password;
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: Text('Login'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter username';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _username = value!;
-                },
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Username',
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Password'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter password';
-                  }
-                  return null;
-                },
-                obscureText: true,
-                onSaved: (value) {
-                  _password = value!;
-                },
+            ),
+            SizedBox(height: 20.0),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      if (_username == 'your_username' &&
-                          _password == 'your_password') {
-                        Navigator.pushReplacementNamed(context, '/home_screen');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Invalid username or password')),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Login'),
-                ),
-              ),
-            ],
-          ),
+              obscureText: true,
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                String username = _usernameController.text;
+                String password = _passwordController.text;
+                if (username == 'your_username' &&
+                    password == 'your_password') {
+                  Navigator.pushReplacementNamed(context, '/home_screen');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Invalid username or password')),
+                  );
+                }
+              },
+              child: Text('Login'),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class CreateFlashcardPage extends StatelessWidget {
-  const CreateFlashcardPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Flashcard'),
-      ),
-      body: Center(
-        child: Text('Create Flashcard Page'),
       ),
     );
   }
