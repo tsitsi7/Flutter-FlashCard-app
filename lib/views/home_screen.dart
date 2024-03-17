@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    child: Image.asset("assets/dash.png"),
+                    child: Image.asset("assets/parrot-new.png"),
                   ),
                   const SizedBox(
                     height: 10,
