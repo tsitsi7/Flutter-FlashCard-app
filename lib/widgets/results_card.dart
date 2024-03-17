@@ -99,7 +99,7 @@ class ResultsCard extends StatelessWidget {
                                           fontWeight: FontWeight.w400,
                                         ),
                                   ),
-                                  Image.asset("assets/bouncy-cup.gif",
+                                  Image.asset("assets/trophy-unscreen.gif",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -117,7 +117,7 @@ class ResultsCard extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  Image.asset("assets/sad.png",
+                                  Image.asset("assets/sad-unscreen.gif",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *

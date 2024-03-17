@@ -17,12 +17,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to FlashCard-quiz App'),
+        title: Text('FlashCard-quiz'),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF4993FA),
       ),
       body: Container(
-        color: Colors.blue,
+        color: Color(0xFF5170FD),
         child: Center(
           child: Card(
             margin: EdgeInsets.all(20.0),
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       showLoginDialog(); // Show login dialog when "Login" is pressed
                     },
-                    child: Text('Login'),
+                    child: Text('Already have an account? Login'),
                   ),
                 ],
               ),
