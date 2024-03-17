@@ -4,6 +4,7 @@ import 'package:flashcards_quiz/models/flutter_topics_model.dart';
 import 'package:flashcards_quiz/views/flashcard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flashcards_quiz/models/flashcard.dart';
+import 'package:flashcards_quiz/views/edit_flashcard_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +15,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<FlashCard> flashCards = [];
+  void _navigateToEditScreen(FlashCard flashCard) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditFlashcardScreen(flashCard: flashCard),
+      ),
+    ).then((_) {
+      // Refresh the flashcards after editing
+      loadFlashCardsLocally();
+    });
+  }
+
+  void _deleteFlashcard(FlashCard flashCard) async {
+    setState(() {
+      flashCards.removeWhere((card) => card == flashCard);
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    List<String> flashCardsJson = prefs.getStringList('flashCards') ?? [];
+
+    final flashCardJson =
+        jsonEncode(flashCard.toJson()); // Convert flashcard to JSON string
+
+    // Remove the flashcard from the list of flashcards in SharedPreferences
+    flashCardsJson.removeWhere((jsonString) => jsonString == flashCardJson);
+
+    await prefs.setStringList('flashCards', flashCardsJson);
+  }
 
   @override
   void initState() {
@@ -89,34 +118,62 @@ class _HomePageState extends State<HomePage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Icon(
-                                //   Icons
-                                //       .accessibility_new_rounded, // Example icon
-                                //   color: Colors.white,
-                                //   size: 55,
-                                // ),
-                                const SizedBox(
-                                  height: 15,
+                          child: Stack(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      // Implement edit functionality
+                                      // You can pass the current flashcard data to another page for editing
+                                      _navigateToEditScreen(
+                                          topicFlashCards[index]);
+                                    },
+                                    icon: Icon(Icons.edit, color: Colors.white),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _deleteFlashcard(topicFlashCards[index]);
+                                      Navigator.pop(context);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomePage()));
+
+                                      // Close the dialog
+                                      // Implement delete functionality
+                                      // You can show a confirmation dialog before deleting the flashcard
+                                    },
+                                    icon:
+                                        Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      topic,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall!
+                                          .copyWith(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  topic,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .copyWith(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -283,14 +340,9 @@ class _HomePageState extends State<HomePage> {
                   options: optionsValue,
                 );
                 await saveFlashCardLocally(newCard);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        HomePage(), // Navigate to the same page
-                  ),
-                );
-                // Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Text("Add"),
             ),

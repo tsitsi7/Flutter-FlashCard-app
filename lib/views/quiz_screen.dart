@@ -224,7 +224,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                           return InkWell(
                                             onTap: () {
                                               if (!isLocked) {
-                                                // stopTime();
+                                                stopTime();
                                                 setState(() {
                                                   isLocked = true;
                                                   selectedOption =
