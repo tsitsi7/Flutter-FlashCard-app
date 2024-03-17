@@ -124,11 +124,7 @@ class _HomePageState extends State<HomePage> {
                 physics: const BouncingScrollPhysics(),
                 children: [
                   Container(
-<<<<<<< Updated upstream
-                    // add a logout button here that directs to the login page
-=======
                     height: 400,
->>>>>>> Stashed changes
                     decoration: BoxDecoration(
                       color: bgColor3,
                       boxShadow: [
