@@ -237,7 +237,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         ['correctAnswer'];
                                                 if (selectedOption ==
                                                     correctAnswer) {
-                                                  // isLocked = false;
                                                   score++;
                                                   showDialog(
                                                     context: context,
@@ -339,9 +338,6 @@ class _QuizScreenState extends State<QuizScreen> {
                               },
                             ),
                           ),
-                          // isLocked
-                          //     ? buildElevatedButton()
-                          //     : const SizedBox.shrink(),
                         ],
                       ),
                     ),
@@ -363,7 +359,6 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   ElevatedButton buildElevatedButton() {
-    //  const Color bgColor3 = Color(0xFF5170FD);
     const Color cardColor = Color(0xFF4993FA);
 
     return ElevatedButton(

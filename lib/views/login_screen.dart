@@ -177,10 +177,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
-    // Implement your login logic here
-    // For now, let's assume a successful login
-    // Here you can check against stored credentials or make API requests
-
     // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

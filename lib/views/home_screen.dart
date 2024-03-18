@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flashcards_quiz/models/flutter_topics_model.dart';
 import 'package:flashcards_quiz/views/flashcard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flashcards_quiz/models/flashcard.dart';
@@ -69,8 +68,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             );
-            // _scaffoldKey.currentState?.openDrawer();
-            // Handle your drawer navigation or any other action
           },
         ),
       ),
@@ -149,10 +146,6 @@ class _HomePageState extends State<HomePage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   HomePage()));
-
-                                      // Close the dialog
-                                      // Implement delete functionality
-                                      // You can show a confirmation dialog before deleting the flashcard
                                     },
                                     icon:
                                         Icon(Icons.delete, color: Colors.white),
@@ -235,15 +228,7 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     List<String> flashCardsJson = prefs.getStringList('flashCards') ?? [];
     // Convert options list to JSON array
-    List<String> optionsJson =
-        card.options.map((option) => jsonEncode(option)).toList();
     // Create a map for the flashcard data
-    Map<String, dynamic> cardData = {
-      'topic': card.topic,
-      'question': card.question,
-      'answer': card.answer,
-      'options': optionsJson,
-    };
     flashCardsJson.add(jsonEncode(card.toJson()));
     await prefs.setStringList('flashCards', flashCardsJson);
   }

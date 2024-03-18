@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flashcards_quiz/views/quiz_screen.dart';
 import 'package:flashcards_quiz/widgets/flash_card_widget.dart';
-import 'package:flashcards_quiz/widgets/linear_progress_indicator_widget.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
-import 'dart:math';
 
 class NewCard extends StatefulWidget {
   final String topicName;
@@ -23,7 +21,6 @@ class NewCard extends StatefulWidget {
 }
 
 class _NewCardState extends State<NewCard> {
-  int _currentIndex = 0;
   late AppinioSwiperController _controller;
   final AppinioSwiperController controller = AppinioSwiperController();
   @override
@@ -60,13 +57,6 @@ class _NewCardState extends State<NewCard> {
                         weight: 10,
                       ),
                     ),
-                    MyProgressIndicator(
-                      // questions: questions,
-                      // questionlenght: [widget.flashCards.length],
-                      optionsList:
-                          widget.flashCards.map((card) => card.answer).toList(),
-                      topicType: widget.topicName,
-                    ),
                   ],
                 ),
               ),
@@ -74,28 +64,24 @@ class _NewCardState extends State<NewCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AppinioSwiper(
-                      loop: true,
-                      backgroundCardCount: 2,
-                      swipeOptions: const SwipeOptions.all(),
-                      allowUnlimitedUnSwipe: true,
-                      controller: _controller,
-                      cardCount: widget.flashCards.length,
-                      cardBuilder: (BuildContext context, int index) {
-                        var card = widget.flashCards[index];
-                        return FlipCardsWidget(
-                          bgColor: cardColor,
-                          cardsLenght: widget.flashCards.length,
-                          currentIndex: index + 1,
-                          answer: card.answer,
-                          question: card.question,
-                          currentTopic: widget.topicName,
-                        );
-                      },
-                      onEnd: () {
-                        setState(() {
-                          _currentIndex = 0;
-                        });
-                      }),
+                    loop: true,
+                    backgroundCardCount: 2,
+                    swipeOptions: const SwipeOptions.all(),
+                    allowUnlimitedUnSwipe: true,
+                    controller: _controller,
+                    cardCount: widget.flashCards.length,
+                    cardBuilder: (BuildContext context, int index) {
+                      var card = widget.flashCards[index];
+                      return FlipCardsWidget(
+                        bgColor: cardColor,
+                        cardsLenght: widget.flashCards.length,
+                        currentIndex: index + 1,
+                        answer: card.answer,
+                        question: card.question,
+                        currentTopic: widget.topicName,
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(
@@ -162,22 +148,5 @@ class _NewCardState extends State<NewCard> {
         ),
       ),
     );
-  }
-
-  // void _swipe(int index, AppinioSwiperDirection direction) {
-  //   print("the card was swiped to the: ${direction.name}");
-  //   print(index);
-  // }
-
-  void _unswipe(bool unswiped) {
-    if (unswiped) {
-      print("SUCCESS: card was unswiped");
-    } else {
-      print("FAIL: no card left to unswipe");
-    }
-  }
-
-  void _onEnd() {
-    print("end reached!");
   }
 }
