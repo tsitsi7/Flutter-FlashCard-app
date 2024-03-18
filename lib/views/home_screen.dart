@@ -4,7 +4,6 @@ import 'package:flashcards_quiz/models/flutter_topics_model.dart';
 import 'package:flashcards_quiz/views/flashcard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flashcards_quiz/models/flashcard.dart';
-import 'package:flashcards_quiz/views/edit_flashcard_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,17 +15,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<FlashCard> flashCards = [];
-  void _navigateToEditScreen(FlashCard flashCard) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditFlashcardScreen(flashCard: flashCard),
-      ),
-    ).then((_) {
-      // Refresh the flashcards after editing
-      loadFlashCardsLocally();
-    });
-  }
 
   void _deleteFlashcard(FlashCard flashCard) async {
     setState(() {
@@ -86,35 +74,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      // drawer: Drawer(
-      //   child: Material(
-      //     elevation: 8.0,
-      //     child: ListView(
-      //       padding: EdgeInsets.zero,
-      //       children: <Widget>[
-      //         DrawerHeader(
-      //           decoration: BoxDecoration(
-      //             color: Colors.blue,
-      //           ),
-      //           child: Text(
-      //             'Menu',
-      //             style: TextStyle(
-      //               color: Colors.white,
-      //               fontSize: 24,
-      //             ),
-      //           ),
-      //         ),
-      //         ListTile(
-      //           title: Text('Logout'),
-      //           onTap: () {
-      //             Navigator.pushReplacementNamed(context, '/login');
-      //             // Perform logout action here
-      //           },
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: Stack(
         children: [
           SafeArea(
@@ -182,15 +141,6 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      // Implement edit functionality
-                                      // You can pass the current flashcard data to another page for editing
-                                      _navigateToEditScreen(
-                                          topicFlashCards[index]);
-                                    },
-                                    icon: Icon(Icons.edit, color: Colors.white),
-                                  ),
                                   IconButton(
                                     onPressed: () {
                                       _deleteFlashcard(topicFlashCards[index]);

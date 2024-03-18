@@ -36,12 +36,6 @@ class _NewCardState extends State<NewCard> {
   Widget build(BuildContext context) {
     const Color bgColor3 = Color(0xFF5170FD);
     const Color cardColor = Color(0xFF4993FA);
-    // List<Question> questions = widget.flashCards
-    //     .map((card) => Question(
-    //           questionText: card.question,
-    //           correctAnswer: card.answer,
-    //         ))
-    //     .toList();
 
     return Scaffold(
       backgroundColor: bgColor3,
@@ -85,9 +79,6 @@ class _NewCardState extends State<NewCard> {
                       swipeOptions: const SwipeOptions.all(),
                       allowUnlimitedUnSwipe: true,
                       controller: _controller,
-                      // onUnSwipe: _unswipe,
-                      // onSwipeBegin: _swipe,
-                      // onEnd: _onEnd,
                       cardCount: widget.flashCards.length,
                       cardBuilder: (BuildContext context, int index) {
                         var card = widget.flashCards[index];
